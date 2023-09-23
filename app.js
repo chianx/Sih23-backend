@@ -31,6 +31,10 @@ app.get("/allJobs", (req, res) => {
     })
 })
 
-app.listen(3000, () => {
-    console.log("Server is running at localhost 3000");
+app.get("/", (req, res) => {
+    res.send("The Sited is up and runnig, There is no Get /");
 })
+
+app.listen(process.env.PORT ||3000, function() {
+    console.log("Server is running on port 3000");
+});
