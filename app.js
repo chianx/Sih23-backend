@@ -16,7 +16,17 @@ app.post("/job", (req, res) => {
     set(jobRef, job).then (async() => {
         console.log("Job posted sucessfully");
     });
-    res.send({status : "200", msg:"Job addes successfully"})
+    res.send({status : "200", msg:"Job added successfully"})
+})
+
+app.post("/course", (req, res) => {
+    const body = req.body;
+    var courseRef = push(ref(db, "courses"));
+    const course = {...body, courseId: courseRef.key};
+    set(courseRef, course).then (async() => {
+        console.log("Course posted sucessfully");
+    });
+    res.send({status : "200", msg:"Course added successfully"})
 })
 
 app.get("/allJobs", (req, res) => {
@@ -31,10 +41,32 @@ app.get("/allJobs", (req, res) => {
     })
 })
 
+app.get("/allCourse", (req, res) => {
+    
+    var courseRef = (ref(db, "courses/"));
+    onValue(courseRef, async(snapshot) => {
+        const data = snapshot.val() != null ? snapshot.val() : [] ;
+        const allCourse = Object.keys(data).map(key => ({
+            ...data[key]
+        })).reverse()
+        res.send(allCourse);
+    })
+})
+
+app.post("/contact", (req, res) => {
+    const body = req.body;
+    var contactRef = push(ref(db, "contact"));
+    const temp = {...body};
+    set(contactRef, temp).then (async() => {
+        console.log("Contact posted sucessfully");
+    });
+    res.send({status : "200", msg:"Contact Us info added successfully"})
+})
+
 app.get("/", (req, res) => {
     res.send("The Sited is up and runnig, There is no Get /");
 })
-
+// https://sih23-backend.vercel.app/
 app.listen(process.env.PORT ||3000, function() {
     console.log("Server is running on port 3000");
 });
