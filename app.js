@@ -63,6 +63,30 @@ app.post("/contact", (req, res) => {
     res.send({status : "200", msg:"Contact Us info added successfully"})
 })
 
+app.post("/register", (req, res) => {
+    const body = req.body;
+    var registerRef = push(ref(db, "users"));
+    const temp = {...body, userId : registerRef.key};
+    set(registerRef, temp).then (async() => {
+        console.log("User Registered");
+    });
+    res.send({status : "200", msg:"User added successfully", userId : registerRef.key})
+})
+
+app.get("/getUser" , (req, res) => {
+    const body = req.body;
+    const uid = body.userId + "";
+    var userRef = (ref(db, "users/" + uid));
+    onValue(userRef, async(snapshot) => {
+        const data = snapshot.val() != null ? snapshot.val() : "" ;
+        if(data === "") {
+            res.send({status: 200, msg: "User Not found"})
+        }else {
+            res.send(data);
+        }
+    })
+})
+
 app.get("/", (req, res) => {
     res.send("The Sited is up and runnig, There is no Get /");
 })
