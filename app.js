@@ -65,8 +65,9 @@ app.post("/contact", (req, res) => {
 
 app.post("/register", (req, res) => {
     const body = req.body;
-    var registerRef = push(ref(db, "users"));
-    const temp = {...body, userId : registerRef.key};
+    const uid = body.uid;
+    var registerRef = push(ref(db, "users/" + uid));
+    const temp = {...body};
     set(registerRef, temp).then (async() => {
         console.log("User Registered");
     });
