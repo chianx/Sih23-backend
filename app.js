@@ -66,12 +66,13 @@ app.post("/contact", (req, res) => {
 app.post("/register", (req, res) => {
     const body = req.body;
     const uid = body.uid;
-    var registerRef = push(ref(db, "users/" + uid));
     const temp = {...body};
-    set(registerRef, temp).then (async() => {
-        console.log("User Registered");
-    });
-    res.send({status : "200", msg:"User added successfully", userId : registerRef.key})
+    
+    set(ref(db, 'users/' + uid), temp).then(async() => {
+        res.send({status : 200, msg:"User added successfully", userId : uid})
+    }).catch((error) => {
+        res.send({status : 202, msg:"Something went wrong", userId : uid})
+    })
 })
 
 app.get("/getUser" , (req, res) => {
