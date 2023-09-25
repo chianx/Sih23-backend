@@ -1,13 +1,13 @@
 import express from  "express";
 import cors from "cors";
-import helmet from "helmet";
+// import helmet from "helmet";
 import {db} from "./firebaseConfig/config.js"
 import {ref, onValue, set, update, get, remove, push} from "firebase/database";
 
 const app = express();
 app.use(express.json())
 app.use(cors())
-app.use(helmet())
+// app.use(helmet())
 
 app.post("/job", (req, res) => {
     const body = req.body;
@@ -65,22 +65,23 @@ app.post("/contact", (req, res) => {
 
 app.post("/register", (req, res) => {
     const body = req.body;
-    var registerRef = push(ref(db, "users"));
-    const temp = {...body, userId : registerRef.key};
-    set(registerRef, temp).then (async() => {
-        console.log("User Registered");
-    });
-    res.send({status : "200", msg:"User added successfully", userId : registerRef.key})
+    const uid = body.uid;
+    const temp = {...body};
+    
+    set(ref(db, 'users/' + uid), temp).then(async() => {
+        res.send({status : 200, msg:"User added successfully", userId : uid})
+    }).catch((error) => {
+        res.send({status : 202, msg:"Something went wrong", userId : uid})
+    })
 })
 
-app.get("/getUser" , (req, res) => {
-    const body = req.body;
-    const uid = body.userId + "";
+app.get("/getUser/:id" , (req, res) => {
+    const uid = req.params.id;
     var userRef = (ref(db, "users/" + uid));
     onValue(userRef, async(snapshot) => {
         const data = snapshot.val() != null ? snapshot.val() : "" ;
         if(data === "") {
-            res.send({status: 200, msg: "User Not found"})
+            res.send({status: 202, msg: "User Not found"})
         }else {
             res.send(data);
         }
