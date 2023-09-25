@@ -75,9 +75,8 @@ app.post("/register", (req, res) => {
     })
 })
 
-app.get("/getUser" , (req, res) => {
-    const body = req.body;
-    const uid = body.userId + "";
+app.get("/getUser/:id" , (req, res) => {
+    const uid = req.params.id + "";
     var userRef = (ref(db, "users/" + uid));
     onValue(userRef, async(snapshot) => {
         const data = snapshot.val() != null ? snapshot.val() : "" ;
