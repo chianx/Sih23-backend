@@ -1,8 +1,8 @@
 import express from  "express";
 import cors from "cors";
 // import helmet from "helmet";
-import {db} from "./firebaseConfig/config.js"
-import {ref, onValue, set, update, get, remove, push} from "firebase/database";
+import db from "./firebaseConfig/config.js"
+import {ref, onValue, set, push} from "firebase/database";
 
 const app = express();
 app.use(express.json())
