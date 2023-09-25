@@ -76,12 +76,12 @@ app.post("/register", (req, res) => {
 })
 
 app.get("/getUser/:id" , (req, res) => {
-    const uid = req.params.id + "";
+    const uid = req.params.id;
     var userRef = (ref(db, "users/" + uid));
     onValue(userRef, async(snapshot) => {
         const data = snapshot.val() != null ? snapshot.val() : "" ;
         if(data === "") {
-            res.send({status: 200, msg: "User Not found"})
+            res.send({status: 202, msg: "User Not found"})
         }else {
             res.send(data);
         }
