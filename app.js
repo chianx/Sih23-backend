@@ -2,7 +2,7 @@ import express from  "express";
 import cors from "cors";
 // import helmet from "helmet";
 import db from "./firebaseConfig/config.js"
-import {ref, onValue, set, push} from "firebase/storage/dist/index.cjs.js";
+import {ref, onValue, set, push} from "firebase/database/dist/index.cjs.js";
 
 const app = express();
 app.use(express.json())
